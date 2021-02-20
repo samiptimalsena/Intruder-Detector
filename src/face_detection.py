@@ -1,8 +1,9 @@
 import face_recognition
 import cv2 as cv
 import numpy as np
+import os
 from glob import glob
-from datetime import datetime
+from datetime import date, datetime
 
 #local
 import config
@@ -32,7 +33,13 @@ def get_registered_faces_info():
 
 #save frame to the location
 def save_frame(frame):
-    file_name = f"{config.DETECTION_LOGS}/intruder_{datetime.now()}.jpg"
+    today = date.today()
+    today_path = f'{config.DETECTION_LOGS}/{today}'
+
+    if not os.path.exists(today_path):
+        os.makedirs(today_path)
+
+    file_name = f"{today_path}/intruder_{datetime.now()}.jpg"
     cv.imwrite(file_name,frame)
 
 def recognize_face(known_face_encodings,known_face_names,frame):
@@ -52,13 +59,11 @@ def recognize_face(known_face_encodings,known_face_names,frame):
 
         face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
 
-        print("ram Len is ",len(known_face_encodings))
-        if len(face_distances) > 0:
-            best_match_index = np.argmin(face_distances)
-            if matches[best_match_index]:
-                name = known_face_names[best_match_index]
-                
-            face_names.append(name)
+        best_match_index = np.argmin(face_distances)
+        if matches[best_match_index]:
+            name = known_face_names[best_match_index]
+            
+        face_names.append(name)
 
     for (top, right, bottom, left), name in zip(face_locations, face_names):
         top *= 4
