@@ -1,28 +1,28 @@
 import face_recognition
 import cv2 as cv
 import numpy as np
+from glob import glob
 
+
+known_face_encodings = list()
+known_face_names = list()
+
+DIR = '/home/samip/Face-Recognition-System/input/*'
 video_capture = cv.VideoCapture(0)
+harr_cascade = cv.CascadeClassifier('/home/samip/Face-Recognition-System/model/haarcascade_frontalface_alt.xml')
 
-samip_image = face_recognition.load_image_file("/home/samip/Face-Recognition-System/input/samip/samip2.jpg")
-samip_face_encoding = face_recognition.face_encodings(samip_image)[0]
+folder_names = glob(DIR)
 
-abishek_image = face_recognition.load_image_file('/home/samip/Face-Recognition-System/input/abishek/abishek.jpg')
-abishek_face_encoding = face_recognition.face_encodings(abishek_image)[0]
+for folder_name in folder_names:
+    name = folder_name.split("/")[-1]
+    image_names = glob(folder_name+"/*.jpg")
+    for image_name in image_names:
+        print(name)
+        image = face_recognition.load_image_file(image_name)
+        encoding = face_recognition.face_encodings(image)[0]
+        known_face_encodings.append(encoding)
+        known_face_names.append(name.capitalize())
 
-santosh_image = face_recognition.load_image_file('/home/samip/Face-Recognition-System/input/santosh/santosh.jpg')
-santosh_face_encoding = face_recognition.face_encodings(santosh_image)[0]
-
-known_face_encodings = [
-    samip_face_encoding,
-    abishek_face_encoding,
-    santosh_face_encoding
-]
-known_face_names = [
-    "Samip",
-    'Abishek',
-    'Santosh'
-]
 
 face_locations = list()
 face_encodings = list()
@@ -37,7 +37,7 @@ while True:
     rgb_small_frame = cv.cvtColor(small_frame, cv.COLOR_BGR2RGB)
 
     if process_this_frame:
-        face_locations = face_recognition.face_locations(rgb_small_frame)
+        face_locations = face_recognition.face_locations(rgb_small_frame, 3)
         face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
 
         face_names = list()
