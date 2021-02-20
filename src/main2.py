@@ -2,6 +2,7 @@ import os
 from config import REGISTERED_IMAGES,DETECTION_LOGS
 import cv2 as cv
 import streamlit as st
+import numpy as np
 
 st.title("Unauthorized personnel Detector")
 
@@ -25,10 +26,12 @@ if not os.path.exists(DETECTION_LOGS):
 
 
 #get saved infos
-known_face_encodings, known_face_names = get_registered_faces_info()
+# known_face_encodings, known_face_names = list(), list()
+
 
 video_capture = None
 def startCam():
+   known_face_encodings, known_face_names = get_registered_faces_info()
    video_capture = cv.VideoCapture(0)
    while True:
 
@@ -61,6 +64,13 @@ def collect_date(user):
    image_added = 1
    while True:
       ret, frame = video_capture.read()
+      frame = cv.cvtColor(frame,cv.COLOR_BGR2RGB)
+
+      if count > 150:
+         frame = np.zeros((500,500,3), dtype='uint8')
+         frame[:] = 255
+         cv.putText(frame, "Completed ", (200, 300), cv.FONT_HERSHEY_COMPLEX, 1, (0,0,0))
+
       FRAME_WINDOW.image(frame)
 
       if(cv.waitKey(20) & 0XFF==ord('d')) or count >150:
