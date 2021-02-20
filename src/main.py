@@ -1,7 +1,31 @@
 import os
 from config import REGISTERED_IMAGES,DETECTION_LOGS
 import cv2 as cv
+import streamlit as st
+from datetime import date
+from glob import glob
 
+# import PIL from image
+
+st.title("Unauthorized personnel Detector")
+
+st.write("Enter username only to add new user")
+user = st.text_input("label goes here")
+
+col1,col2,col3,col4 = st.beta_columns(4)
+
+html_page = """
+<style>
+.block-container{
+        max-width: 100%;
+    }
+</style>
+
+"""
+
+st.markdown(html_page,unsafe_allow_html=True)
+
+FRAME_WINDOW = st.image([])
 
 #local
 from face_detection import (
@@ -12,26 +36,125 @@ if not os.path.exists(DETECTION_LOGS):
     os.makedirs(DETECTION_LOGS)
 
 #setup
-video_capture = cv.VideoCapture(0)
+
 
 #get saved infos
-known_face_encodings, known_face_names = get_registered_faces_info()
+known_face_encodings, known_face_names = [None,None]
+
+video_capture = None
+def startCam():
+   known_face_encodings, known_face_names = get_registered_faces_info()
+   video_capture = cv.VideoCapture(0)
+   while True:
+
+      _, frame = video_capture.read()
+      # frame =
+
+      frame_inference = recognize_face(known_face_encodings,known_face_names,frame)
+      frame_inference = cv.cvtColor(frame_inference,cv.COLOR_BGR2RGB)
 
 
-while True:
-    _, frame = video_capture.read()
-    
-    frame_inference = recognize_face(
-        known_face_encodings,
-        known_face_names,
-        frame
-    )
-    
+      FRAME_WINDOW.image(frame_inference)
+      #  cv.imshow('Video', frame_inference)
 
-    cv.imshow('Video', frame_inference)
+      if cv.waitKey(1) & 0xFF == ord('q'):
+         video_capture.release()
+         cv.destroyAllWindows()
+         break
 
-    if cv.waitKey(1) & 0xFF == ord('q'):
-        break
 
-video_capture.release()
+def collect_date(user):
+   os.makedirs("../input/"+user)
+
+   video_capture = cv.VideoCapture(0)
+
+   if not video_capture.isOpened():
+      raise Exception("Could not open video device")
+
+   count=0
+   image_added = 1
+   while True:
+      ret, frame = video_capture.read()
+      FRAME_WINDOW.image(frame)
+
+      if(cv.waitKey(20) & 0XFF==ord('d')) or count >150:
+         cv.destroyAllWindows()
+         break
+
+      if count % 10 == 0:
+         print(f"{image_added}  image added")
+         cv.imwrite("../input/"+user+"/image"+str(count)+".jpg",frame)
+         image_added += 1
+
+      count=count+1
+      # cv.imshow("Adding Training Data", frame)
+
+   video_capture.release()
+
+def load_images_from_folder(folder):
+    images = []
+    for filename in os.listdir(folder):
+        img = cv.imread(os.path.join(folder,filename))
+        if img is not None:
+            images.append(img)
+    return images
+
+
+
+if col2.button("Add a new user"):
+   video_capture = None
+   collect_date(user)
+
+
+
+def get_intruders():
+   folder_path = f"../detection_logs/{date.today()}/*"
+   file_names = glob(folder_path)
+   images_frames = []
+
+   images_frames = st.beta_columns(len(file_names))
+
+   for i, file_path in enumerate(file_names):
+      img = cv.imread(file_path)
+      img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+      images_frames[i].image(img,width=200)
+
+
+
+
+
+if col3.button("Start Webcam"):
+   startCam()
+
+# Login system
+# def is_authenticated(password):
+#    return password == "admin"
+
+
+# def generate_login_block():
+#    block1 = st.empty()
+#    block2 = st.empty()
+
+#    return block1, block2
+
+# def clean_blocks(blocks):
+#    for block in blocks:
+#       block.empty()
+   # get_intruders()
+
+# def login(blocks):
+#    blocks[0].markdown("""
+#          <style>
+#                input {
+#                   -webkit-text-security: disc;
+#                }
+#          </style>
+#       """, unsafe_allow_html=True)
+
+#    return blocks[1].text_input('Password')
+
+if col4.button("Admin Panel"):
+   get_intruders()
+
+# video_capture.release()
 cv.destroyAllWindows()
