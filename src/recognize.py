@@ -3,14 +3,15 @@ import cv2 as cv
 import numpy as np
 from glob import glob
 
+import config
 
 known_face_encodings = list()
 known_face_names = list()
 
-DIR = '/home/samip/Face-Recognition-System/input/*'
-video_capture = cv.VideoCapture(0)
-harr_cascade = cv.CascadeClassifier('/home/samip/Face-Recognition-System/model/haarcascade_frontalface_alt.xml')
+DIR = f'{config.REGISTERED_IMAGES}/*'
 
+video_capture = cv.VideoCapture(0)
+harr_cascade = cv.CascadeClassifier(config.HAARCASCADE)
 folder_names = glob(DIR)
 
 for folder_name in folder_names:
