@@ -5,6 +5,9 @@ import streamlit as st
 
 st.title("Unauthorized personnel Detector")
 
+st.write("Enter username only to add new user")
+user = st.text_input("label goes here")
+
 col1,col2,col3,col4 = st.beta_columns(4)
 
 
@@ -24,9 +27,11 @@ if not os.path.exists(DETECTION_LOGS):
 #get saved infos
 known_face_encodings, known_face_names = get_registered_faces_info()
 
-video_capture = cv.VideoCapture(0)
+video_capture = None
 def startCam():
+   video_capture = cv.VideoCapture(0)
    while True:
+
       _, frame = video_capture.read()
       # frame =
 
@@ -38,12 +43,44 @@ def startCam():
       #  cv.imshow('Video', frame_inference)
 
       if cv.waitKey(1) & 0xFF == ord('q'):
+         video_capture.release()
          cv.destroyAllWindows()
          break
 
 
+
+def collect_date(user):
+   os.makedirs("../input/"+user)
+
+   video_capture = cv.VideoCapture(0)
+
+   if not video_capture.isOpened():
+      raise Exception("Could not open video device")
+
+   count=0
+   image_added = 1
+   while True:
+      ret, frame = video_capture.read()
+      FRAME_WINDOW.image(frame)
+
+      if(cv.waitKey(20) & 0XFF==ord('d')) or count >150:
+         cv.destroyAllWindows()
+         break
+
+      if count % 10 == 0:
+         print(f"{image_added}  image added")
+         cv.imwrite("../input/"+user+"/image"+str(count)+".jpg",frame)
+         image_added += 1
+
+      count=count+1
+      # cv.imshow("Adding Training Data", frame)
+
+   video_capture.release()
+
 if col2.button("Add a new user"):
-   pass
+   video_capture = None
+   collect_date(user)
+
 
 if col3.button("Start Webcam"):
    startCam()
@@ -82,5 +119,5 @@ if col4.button("Login As Admin"):
 	elif password:
 		st.info("Please enter a valid password")
 
-video_capture.release()
+# video_capture.release()
 cv.destroyAllWindows()
