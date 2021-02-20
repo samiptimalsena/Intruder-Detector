@@ -32,7 +32,7 @@ def get_registered_faces_info():
 
 #save frame to the location
 def save_frame(frame):
-    file_name = f"{config.DETECTION_LOGS}/intruder_{datetime.now().jpg}"
+    file_name = f"{config.DETECTION_LOGS}/intruder_{datetime.now()}.jpg"
     cv.imwrite(file_name,frame)
 
 def recognize_face(known_face_encodings,known_face_names,frame):
