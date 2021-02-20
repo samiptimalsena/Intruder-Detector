@@ -7,25 +7,13 @@ from datetime import date
 from glob import glob
 
 
-# import PIL from image
+st.title("Intruder Detector")
 
-st.title("Unauthorized personnel Detector")
-
-st.write("Enter username only to add new user")
+# st.write("Enter username only to add new user")
 user = st.text_input("label goes here")
 
 col1,col2,col3,col4 = st.beta_columns(4)
 
-html_page = """
-<style>
-.block-container{
-        max-width: 100%;
-    }
-</style>
-
-"""
-
-st.markdown(html_page,unsafe_allow_html=True)
 
 FRAME_WINDOW = st.image([])
 
@@ -119,10 +107,10 @@ if col2.button("Add a new user"):
 
 def get_intruders():
    folder_path = f"../detection_logs/{date.today()}/*"
-   file_names = glob(folder_path)
+   file_names = glob(folder_path)[:5]
    images_frames = []
 
-   images_frames = st.beta_columns(len(file_names))
+   images_frames = st.beta_columns(5)
 
    for i, file_path in enumerate(file_names):
       img = cv.imread(file_path)
@@ -131,37 +119,9 @@ def get_intruders():
 
 
 
-
-
 if col3.button("Start Webcam"):
    startCam()
 
-# Login system
-# def is_authenticated(password):
-#    return password == "admin"
-
-
-# def generate_login_block():
-#    block1 = st.empty()
-#    block2 = st.empty()
-
-#    return block1, block2
-
-# def clean_blocks(blocks):
-#    for block in blocks:
-#       block.empty()
-   # get_intruders()
-
-# def login(blocks):
-#    blocks[0].markdown("""
-#          <style>
-#                input {
-#                   -webkit-text-security: disc;
-#                }
-#          </style>
-#       """, unsafe_allow_html=True)
-
-#    return blocks[1].text_input('Password')
 
 if col4.button("Admin Panel"):
    get_intruders()
