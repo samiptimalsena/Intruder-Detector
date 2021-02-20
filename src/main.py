@@ -1,9 +1,11 @@
 import os
 from config import REGISTERED_IMAGES,DETECTION_LOGS
 import cv2 as cv
+import numpy as np
 import streamlit as st
 from datetime import date
 from glob import glob
+
 
 # import PIL from image
 
@@ -75,8 +77,16 @@ def collect_date(user):
    image_added = 1
    while True:
       ret, frame = video_capture.read()
-      FRAME_WINDOW.image(frame)
-
+      frame = cv.cvtColor(frame,cv.COLOR_BGR2RGB)
+        
+      #add completed message img
+      if count > 150:
+         frame = np.zeros((500,500,3), dtype='uint8')
+         frame[:] = 255
+         cv.putText(frame, "Completed ", (200, 300), cv.FONT_HERSHEY_COMPLEX, 1, (0,0,0))
+        
+      FRAME_WINDOW.image(frame)  
+        
       if(cv.waitKey(20) & 0XFF==ord('d')) or count >150:
          cv.destroyAllWindows()
          break
