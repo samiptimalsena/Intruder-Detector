@@ -24,9 +24,11 @@ if not os.path.exists(DETECTION_LOGS):
 #get saved infos
 known_face_encodings, known_face_names = get_registered_faces_info()
 
-video_capture = cv.VideoCapture(0)
+video_capture = None
 def startCam():
+   video_capture = cv.VideoCapture(0)
    while True:
+      
       _, frame = video_capture.read()
       # frame =
 
@@ -38,11 +40,13 @@ def startCam():
       #  cv.imshow('Video', frame_inference)
 
       if cv.waitKey(1) & 0xFF == ord('q'):
+         video_capture.release()
          cv.destroyAllWindows()
          break
 
 
 if col2.button("Add a new user"):
+   video_capture = None
    pass
 
 if col3.button("Start Webcam"):
@@ -82,5 +86,5 @@ if col4.button("Login As Admin"):
 	elif password:
 		st.info("Please enter a valid password")
 
-video_capture.release()
+# video_capture.release()
 cv.destroyAllWindows()
