@@ -31,11 +31,7 @@ video_capture = None
 def startCam():
    video_capture = cv.VideoCapture(0)
    while True:
-<<<<<<< HEAD
 
-=======
-
->>>>>>> 5d3b2c17e8ee80f50d5a66d834822032ee11dc09
       _, frame = video_capture.read()
       # frame =
 
@@ -83,12 +79,8 @@ def collect_date(user):
 
 if col2.button("Add a new user"):
    video_capture = None
-<<<<<<< HEAD
    collect_date(user)
 
-=======
-   pass
->>>>>>> 5d3b2c17e8ee80f50d5a66d834822032ee11dc09
 
 if col3.button("Start Webcam"):
    startCam()
@@ -128,8 +120,4 @@ if col4.button("Login As Admin"):
 		st.info("Please enter a valid password")
 
 # video_capture.release()
-<<<<<<< HEAD
 cv.destroyAllWindows()
-=======
-cv.destroyAllWindows()
->>>>>>> 5d3b2c17e8ee80f50d5a66d834822032ee11dc09
