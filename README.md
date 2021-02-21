@@ -13,7 +13,7 @@ python3 -m pip install -r requirements.txt
 # Detectron2: https://github.com/facebookresearch/detectron2/blob/master/INSTALL.md
 ```
 
-## Inference
+## Run
 
 ```bash
 cd src
@@ -23,9 +23,3 @@ streamlit run main.py
 ## Demo
 
 https://youtu.be/lvw0dnLswd4
-
-## Run
-
-```python
-python ./src/main.py
-```
