@@ -7,7 +7,7 @@ Building a robust system that identifies and records when an intruder enters a r
 Dependencies installation under pip package manager
 
 ```bash
-python3 -m pip install -r requirements.txt
+python3 -m pip install -r requirement.txt
 ```
 
 ## Run
