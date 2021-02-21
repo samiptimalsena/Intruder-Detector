@@ -8,9 +8,6 @@ Dependencies installation under pip package manager
 
 ```bash
 python3 -m pip install -r requirements.txt
-# If requirements.txt fails:
-# Pytorch: https://pytorch.org/get-started/locally/
-# Detectron2: https://github.com/facebookresearch/detectron2/blob/master/INSTALL.md
 ```
 
 ## Run
