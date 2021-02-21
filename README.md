@@ -19,4 +19,4 @@ streamlit run main.py
 
 ## Demo
 
-https://youtu.be/lvw0dnLswd4
+https://www.youtube.com/watch?v=FDTt_JyI7HQ
