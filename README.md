@@ -1,22 +1,18 @@
-# Intruder-Detector
+# Intruder Detector
 
 Building a robust system that identifies and records when an intruder enters a room.
 
 ## Requirements and dependencies
 
-Dependencies installation under pip package manager
+Clone the repository and install the dependencies using pip package manager.
 
-```bash
-python3 -m pip install -r requirement.txt
+```
+python3 -m pip install -r requirements.txt
 ```
 
 ## Run
 
-```bash
-cd src
-streamlit run main.py
 ```
-
-## Demo
-
-https://www.youtube.com/watch?v=FDTt_JyI7HQ
+cd src
+streamlit run app.py
+```
