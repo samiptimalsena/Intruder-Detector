@@ -3,7 +3,7 @@ import cv2 as cv
 import numpy as np
 import os
 from glob import glob
-from datetime import date, datetime
+from datetime import datetime
 
 #local
 import config
@@ -33,13 +33,7 @@ def get_registered_faces_info():
 
 #save frame to the location
 def save_frame(frame):
-    today = date.today()
-    today_path = f'{config.DETECTION_LOGS}/{today}'
-
-    if not os.path.exists(today_path):
-        os.makedirs(today_path)
-
-    file_name = f"{today_path}/intruder_{datetime.now()}.jpg"
+    file_name = config.DETECTION_LOGS + "/" + str(datetime.now())+".jpg"
     cv.imwrite(file_name,frame)
 
 def recognize_face(known_face_encodings,known_face_names,frame):
