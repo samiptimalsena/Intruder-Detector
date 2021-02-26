@@ -3,6 +3,7 @@ import video_capture
 import os
 from detection_logs import show_images
 import config
+from glob import glob
 
 DETECTION_LOGS = config.DETECTION_LOGS
 INPUT_IMAGES = config.REGISTERED_IMAGES
@@ -29,19 +30,27 @@ st.write("   ")
 FRAME_WINDOW = st.image(list())
 
 with st.sidebar:
-    st.title("Intruder Recognition")
+    st.title("Intruder Detector")
     option = st.selectbox("Choose an option", ("Start Webcam", "Add New User"))
+    model_switch = st.checkbox("Turn off the model")
     admin_panel = st.button('🛡️ Admin Panel')
+    del_btn = st.button('❌ Clear Detection Logs')
 
 slot = st.empty()
 slot2 = st.empty()
+
+if del_btn:
+    image_path = glob(DETECTION_LOGS+"/*")
+    if del_btn:
+        for image in image_path:
+            os.remove(image)
 
 if admin_panel:
     show_images(slot)
     slot2.write(" ")
 
 elif option == "Start Webcam":
-    video_capture.startcam(FRAME_WINDOW)
+    video_capture.startcam(FRAME_WINDOW, model_switch)
 
 elif option == "Add New User":
     user = slot.text_input("New user name")

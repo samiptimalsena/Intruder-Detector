@@ -5,14 +5,20 @@ import numpy as np
 import config
 from face_detection import get_registered_faces_info,recognize_face
 
-def startcam(FRAME_WINDOW):
-    known_face_encodings, known_face_names = get_registered_faces_info()
+def startcam(FRAME_WINDOW, model_switch):
+
     video_capture = cv.VideoCapture(0)
+
+    if not model_switch:
+        known_face_encodings, known_face_names = get_registered_faces_info()
 
     while True:
         _, frame = video_capture.read()
-        frame_inference = recognize_face(known_face_encodings,known_face_names,frame)
-        frame_inference = cv.cvtColor(frame_inference,cv.COLOR_BGR2RGB)
+        if not model_switch:
+            frame_inference = recognize_face(known_face_encodings,known_face_names,frame)
+            frame_inference = cv.cvtColor(frame_inference,cv.COLOR_BGR2RGB)
+        else:
+            frame_inference = cv.cvtColor(frame,cv.COLOR_BGR2RGB)
 
         FRAME_WINDOW.image(frame_inference)
 
