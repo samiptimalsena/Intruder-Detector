@@ -41,9 +41,8 @@ slot2 = st.empty()
 
 if del_btn:
     image_path = glob(DETECTION_LOGS+"/*")
-    if del_btn:
-        for image in image_path:
-            os.remove(image)
+    for image in image_path:
+        os.remove(image)
 
 if admin_panel:
     show_images(slot)
